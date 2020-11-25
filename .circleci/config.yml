@@ -1,0 +1,59 @@
+version: 2.1
+
+jobs:
+    performance-report:
+        docker:
+            - image: circleci/node:latest
+        
+        resource_class: small
+
+        steps:
+            - checkout
+            - restore_cache:
+                keys:
+                  - npm-report-{{ checksum "package.json" }}
+                  - npm-report-
+            - run:
+                name: Install JS dependencies
+                command: npm i
+            - save_cache:
+                key: npm-report-{{ checksum "package.json" }}
+                paths:
+                  - ".circleci/node_modules"
+            - run:
+                name: Generate Performance / Accessibility report
+                command: node perf_report.js
+
+    age-report:
+        docker:
+            - image: circleci/node:latest
+        
+        resource_class: small
+
+        steps:
+            - checkout
+            - restore_cache:
+                keys:
+                  - npm-report-{{ checksum "package.json" }}
+                  - npm-report-
+            - run:
+                name: Install JS dependencies
+                command: npm i
+            - save_cache:
+                key: npm-report-{{ checksum "package.json" }}
+                paths:
+                  - ".circleci/node_modules"
+            - run:
+                name: Generate Performance / Accessibility report
+                command: node age_report.js
+
+workflows:
+    version: 2
+
+    performance-report:
+        jobs:
+            - performance-report
+
+    age-report:
+        jobs:
+            - age-report
