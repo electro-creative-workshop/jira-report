@@ -90,4 +90,4 @@ workflows:
         jobs:
             - performance-report
             - age-report
-            - component
+            - component-report
