@@ -44,12 +44,41 @@ jobs:
                 paths:
                   - ".circleci/node_modules"
             - run:
-                name: Generate Performance / Accessibility report
+                name: Generate Ticket Age report
                 command: node age_report.js
+
+    component-report:
+        docker:
+            - image: circleci/node:latest
+        
+        resource_class: small
+
+        steps:
+            - checkout
+            - restore_cache:
+                keys:
+                  - npm-report-{{ checksum "package.json" }}
+                  - npm-report-
+            - run:
+                name: Install JS dependencies
+                command: npm i
+            - save_cache:
+                key: npm-report-{{ checksum "package.json" }}
+                paths:
+                  - ".circleci/node_modules"
+            - run:
+                name: Generate component report
+                command: node component_report.js
 
 workflows:
     version: 2
 
+    ad-hoc:
+        jobs:
+            - performance-report
+            - age-report
+            - component-report
+    
     sunday-reports:
         triggers:
             - schedule:
@@ -61,3 +90,4 @@ workflows:
         jobs:
             - performance-report
             - age-report
+            - component

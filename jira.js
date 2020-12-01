@@ -52,6 +52,7 @@ function formatByAssignee(json){
         output.push({
             "assigneeId": assigneeId,
             "assigneeName": assigneeName,
+            "brand": issue.fields.project.key,
             "id": issue.key,
             "summary": issue.fields.summary,
             "age": age
