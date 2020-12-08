@@ -43,4 +43,16 @@ function formatLayout(rawResult){
     return output;
 }
 
+async function notifyUser(assignee){
+    const userSpecificUrl = confluencePageUrl + "#" + assignee.split(" ").join('');
+
+    let emailData = {
+        "recipient": "james.dejesus@clorox.com",
+        "subject": "Jira: Missing Components",
+        "message": `<p>Assignee: ${assignee}</p><p>You have tickets that no components set. Please take a look at your list of tickets assign the appropriate component for the type of resource expected to work on the task.</p><p>See your list in Confluence: <a href="${userSpecificUrl}">${userSpecificUrl}</a>`
+    }
+    
+    Emailer.send(emailData);
+}
+
 runReport();

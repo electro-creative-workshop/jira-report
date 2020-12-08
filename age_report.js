@@ -1,5 +1,6 @@
 import * as Jira from './jira.js';
 import * as Confluence from './confluence.js';
+import * as Emailer from './emailer.js'
 
 const searchJql = "issuetype%20in%20%28Bug%2C%20Story%2C%20Task%2C%20%22Story%20bug%22%2C%20%22Story%20task%22%29%20AND%20status%20in%20%28Backlog%2C%20%22Design%20Review%22%2C%20%22Functional%20QA%22%2C%20%22In%20Progress%22%2C%20Open%2C%20%22Ready%20for%20QA%22%2C%20Reopened%2C%20%22To%20Do%22%29%20AND%20project%20not%20in%20%28%22Clorox%20Web%20Platform%22%29%20AND%20component%20not%20in%20%28Platform%29%20AND%20component%20not%20in%20%28%22Platform%20Update%22%29%20AND%20NOT%20%22Epic%20Link%22%20%3D%20Platform%20AND%20updated%20%3C%3D%20-30d%20ORDER%20BY%20lastViewed%20DESC"
 const confluencePageUrl = "https://electro-creative-workshop.atlassian.net/wiki/spaces/TEC/pages/1101399131/Ticket+Age+Report";
@@ -19,6 +20,8 @@ function formatLayout(result){
     let overview = "";
    
     for (const assignee in result){
+        notifyUser(assignee);
+
         overview += `<tr><td><a href="${confluencePageUrl}#${assignee.split(" ").join('')}">${assignee}</a></td><td>${result[assignee].length}</td></tr>`;
         output += `<h3 id="${assignee.split(" ").join('')}">${assignee}</h3><table><tbody><tr><th>ID</th><th>Ticket URL</th><th>Summary</th><th>Age</th></tr>`;
         let rows = "";
@@ -46,6 +49,18 @@ function formatLayout(result){
     output = `<h2>Outstanding counts</h2><table><tbody><tr><th>Assignee</th><th># outstanding</th></tr>${overview}</tbody></table>${output}`;
 
     return output;
+}
+
+async function notifyUser(assignee){
+    const userSpecificUrl = confluencePageUrl + "#" + assignee.split(" ").join('');
+
+    let emailData = {
+        "recipient": "james.dejesus@clorox.com",
+        "subject": "Jira: You have aging tickets",
+        "message": `<p>Assignee: ${assignee}</p><p>You have tickets that are at least 30 days old without an update. Please take a look at your list of aging tickets and either provide an update or close it out</p><p>See your list in Confluence: <a href="${userSpecificUrl}">${userSpecificUrl}</a>`
+    }
+    
+    Emailer.send(emailData);
 }
 
 runReport();
