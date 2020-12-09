@@ -8,7 +8,7 @@ const confluencePage = "1101399131";
 async function runReport(){
     const confPageData = await Confluence.fetchPageData(confluencePage);
     const searchResult = await Jira.search(searchJql);
-    const layout = formatLayout(Jira.formatByAssignee(searchResult));
+    const layout = await formatLayout(Jira.formatByAssignee(searchResult));
     await Confluence.write(layout,confluencePage,confPageData);
 
     console.log('Report updated!');
