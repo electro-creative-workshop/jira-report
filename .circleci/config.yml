@@ -70,14 +70,54 @@ jobs:
                 name: Generate component report
                 command: node component_report.js
 
+    security-report:
+        docker:
+            - image: circleci/node:latest
+        
+        resource_class: small
+
+        steps:
+            - checkout
+            - restore_cache:
+                keys:
+                  - npm-report-{{ checksum "package.json" }}
+                  - npm-report-
+            - run:
+                name: Install JS dependencies
+                command: npm i
+            - save_cache:
+                key: npm-report-{{ checksum "package.json" }}
+                paths:
+                  - ".circleci/node_modules"
+            - run:
+                name: Generate component report
+                command: node security_report.js
+
 workflows:
     version: 2
 
     ad-hoc:
         jobs:
-            - performance-report
-            - age-report
-            - component-report
+            - performance-report:
+                filters:
+                    branches:
+                      only:
+                        - main
+            - age-report:
+                filters:
+                    branches:
+                      only:
+                        - main
+            - component-report:
+                filters:
+                    branches:
+                      only:
+                        - main
+            - security-report:
+                filters:
+                    branches:
+                      only:
+                        - main
     
     sunday-reports:
         triggers:
@@ -91,3 +131,4 @@ workflows:
             - performance-report
             - age-report
             - component-report
+            - security-report

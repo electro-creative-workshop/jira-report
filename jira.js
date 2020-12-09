@@ -35,11 +35,18 @@ function formatByBrand(json){
         });
     });
 
-    return output.reduce((grouped,issue) => {
+    const presorted =  output.reduce((grouped,issue) => {
         const groupKey = issue['brand'];
         grouped[groupKey] = (grouped[groupKey] || []).concat(issue);
         return grouped;
     }, {});
+
+    return Object.keys(presorted)
+        .sort()
+        .reduce((obj,key) => {
+            obj[key] = presorted[key];  
+            return obj; 
+        },{});
 }
 
 function formatByAssignee(json){
@@ -59,11 +66,18 @@ function formatByAssignee(json){
         });
     });
 
-    return output.reduce((grouped,issue) => {
+    const presorted =  output.reduce((grouped,issue) => {
         const groupKey = issue['assigneeName'];
         grouped[groupKey] = (grouped[groupKey] || []).concat(issue);
         return grouped;
     }, {});
+
+    return Object.keys(presorted)
+        .sort()
+        .reduce((obj,key) => {
+            obj[key] = presorted[key];  
+            return obj; 
+        },{});
 }
 
 export {
