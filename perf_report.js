@@ -3,7 +3,7 @@ import * as Jira from './jira.js';
 
 const confluencePage = "1083637831";
 const confluencePageUrl = "https://electro-creative-workshop.atlassian.net/wiki/spaces/TEC/pages/1083637831/Outstanding+Performance+and+Accessibility+tickets";
-const searchJql = "status%20in%20%28%22In%20Progress%22%2C%20Open%29%20AND%20labels%20%3D%20Performance%20order%20by%20created%20DESC"
+const searchJql = "status%20in%20%28%22In%20Progress%22%2C%20Open%29%20AND%20labels%20in%20%28a11y%2C%20accessibility%2C%20Performance%29%20order%20by%20created%20DESC"
 
 async function runReport() {
     const searchResult = await Jira.search(searchJql);
