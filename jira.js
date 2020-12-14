@@ -16,7 +16,7 @@ function btoa(str){
 }
 
 async function search(jql){
-    const url = jiraRestApi + jqlSearchCommand + jql;
+    const url = jiraRestApi + jqlSearchCommand + jql + "&maxResults=-1";
     return fetch(url, {"headers": headers})
         .then(response => response.json())
 }
