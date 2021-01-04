@@ -25,8 +25,8 @@ function formatLayout(rawResult){
     const result = Jira.formatByAssignee(rawResult)
 
     for (const assignee in result){
-        overview += `<tr><td><a href="${confluencePageUrl}#${assignee.split(" ").join("")}">${assignee}</a></td><td>${result[assignee].length}</td></tr>`;
-        output += `<h3 id="${assignee.split(" ").join('')}">${assignee}</h3><table><tbody><tr><th>ID</th><th>Ticket URL</th><th>Summary</th></tr>`;
+        overview += `<tr><td><a href="${confluencePageUrl}#${assignee.split(" ").join("-")}">${assignee}</a></td><td>${result[assignee].length}</td></tr>`;
+        output += `<h3 id="${assignee.split(" ").join('-')}">${assignee}</h3><table><tbody><tr><th>ID</th><th>Ticket URL</th><th>Summary</th></tr>`;
         let rows = "";
         
         result[assignee].map((issue) => {

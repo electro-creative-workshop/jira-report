@@ -19,8 +19,8 @@ function formatLayout(result){
     let overview = "";
    
     for (const assignee in result){
-        overview += `<tr><td><a href="${confluencePageUrl}#${assignee.split(" ").join('')}">${assignee}</a></td><td>${result[assignee].length}</td></tr>`;
-        output += `<h3 id="${assignee.split(" ").join('')}">${assignee}</h3><table><tbody><tr><th>ID</th><th>Ticket URL</th><th>Summary</th><th>Age</th></tr>`;
+        overview += `<tr><td><a href="${confluencePageUrl}#${assignee.split(" ").join('-')}">${assignee}</a></td><td>${result[assignee].length}</td></tr>`;
+        output += `<h3 id="${assignee.split(" ").join('-')}">${assignee}</h3><table><tbody><tr><th>ID</th><th>Ticket URL</th><th>Summary</th><th>Age</th></tr>`;
         let rows = "";
         
         result[assignee].map((issue) => {
