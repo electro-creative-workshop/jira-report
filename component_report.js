@@ -22,14 +22,14 @@ function formatLayout(rawResult){
     const TSD_removed = rawResult.issues.filter(issue => issue.fields.project.key !== 'TSD');
     rawResult.issues = TSD_removed;
 
-    const result = Jira.formatByAssignee(rawResult)
+    const result = Jira.formatByReporter(rawResult)
 
-    for (const assignee in result){
-        overview += `<tr><td><a href="${confluencePageUrl}#${assignee.split(" ").join("-")}">${assignee}</a></td><td>${result[assignee].length}</td></tr>`;
-        output += `<h3 id="${assignee.split(" ").join('-')}">${assignee}</h3><table><tbody><tr><th>ID</th><th>Ticket URL</th><th>Summary</th></tr>`;
+    for (const reporter in result){
+        overview += `<tr><td><a href="${confluencePageUrl}#${reporter.split(" ").join("-")}">${reporter}</a></td><td>${result[reporter].length}</td></tr>`;
+        output += `<h3 id="${reporter.split(" ").join('-')}">${reporter}</h3><table><tbody><tr><th>ID</th><th>Ticket URL</th><th>Summary</th></tr>`;
         let rows = "";
         
-        result[assignee].map((issue) => {
+        result[reporter].map((issue) => {
             if (issue.brand !== 'TSD'){
                 const summary = issue.summary.replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/&/g, "&amp;");
                 rows += `<tr><td>${issue.id}</td><td><a href="https://electro-creative-workshop.atlassian.net/browse/${issue.id}">https://electro-creative-workshop.atlassian.net/browse/${issue.id}</a></td><td>${summary}</td></tr>`;
@@ -38,7 +38,7 @@ function formatLayout(rawResult){
         output += `${rows}</tbody></table>`;
     }
 
-    output = `<h2>Outstanding counts</h2><table><tbody><tr><th>Assignee</th><th># outstanding</th></tr>${overview}</tbody></table>${output}`;
+    output = `<h2>Outstanding counts</h2><table><tbody><tr><th>Reporter</th><th># outstanding</th></tr>${overview}</tbody></table>${output}`;
 
     return output;
 }

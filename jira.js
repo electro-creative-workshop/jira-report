@@ -80,8 +80,40 @@ function formatByAssignee(json){
         },{});
 }
 
+function formatByReporter(json){
+    const output = [];
+    json.issues.map((issue) => {
+        const created = new Date(issue.fields.created);
+        const age = new Date() - created;
+        const reporterId = issue.fields.reporter !== null ? issue.fields.reporter.accountId : "no-reporter";
+        const reporterName = issue.fields.reporter !== null ? issue.fields.reporter.displayName : "no-reporter";
+        output.push({
+            "reporterId": reporterId,
+            "reporterName": reporterName,
+            "brand": issue.fields.project.key,
+            "id": issue.key,
+            "summary": issue.fields.summary,
+            "age": age
+        });
+    });
+
+    const presorted =  output.reduce((grouped,issue) => {
+        const groupKey = issue['reporterName'];
+        grouped[groupKey] = (grouped[groupKey] || []).concat(issue);
+        return grouped;
+    }, {});
+
+    return Object.keys(presorted)
+        .sort()
+        .reduce((obj,key) => {
+            obj[key] = presorted[key];  
+            return obj; 
+        },{});
+}
+
 export {
     search,
     formatByBrand,
-    formatByAssignee
+    formatByAssignee,
+    formatByReporter
 }
