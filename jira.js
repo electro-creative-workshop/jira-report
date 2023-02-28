@@ -6,6 +6,8 @@ const jqlSearchCommand = "search?jql="
 const aEmail = process.env.ATLASSIAN_EMAIL;
 const aToken = process.env.ATLASSIAN_TOKEN;
 
+const maxIssues = 100;
+
 const headers = {
     "Authorization": "Basic " + btoa(aEmail+":"+aToken),
     "Content-type": "application/json"
@@ -16,9 +18,22 @@ function btoa(str){
 }
 
 async function search(jql){
-    const url = jiraRestApi + jqlSearchCommand + jql + "&maxResults=-1";
-    return fetch(url, {"headers": headers})
-        .then(response => response.json())
+    const issues = [];
+    let startAt = 0;
+    let remainingPages = true;
+
+    while(remainingPages){
+        const url = jiraRestApi + jqlSearchCommand + jql + "&maxResults="+maxIssues+"&startAt=" + startAt;
+        const response = await fetch(url, {"headers": headers});
+        const responseData = await response.json();
+        issues.push(...responseData.issues)
+        startAt += maxIssues;
+        if (startAt > responseData.total){
+            remainingPages = false;
+        }
+    }
+
+    return {issues};
 }
 
 function formatByBrand(json){
