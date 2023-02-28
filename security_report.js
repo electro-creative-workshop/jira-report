@@ -17,6 +17,7 @@ async function runReport(){
 async function formatLayout(result){
     let output = "";
     let overview = "";
+    let total = 0;
    
     for (const brand in result){
         overview += `<tr><td><a href="${confluencePageUrl}#${brand}">${brand}</a></td><td>${result[brand].length}</td></tr>`;
@@ -40,9 +41,10 @@ async function formatLayout(result){
             rows += `<tr><td>${issue.id}</td><td><a href="https://electro-creative-workshop.atlassian.net/browse/${issue.id}">https://electro-creative-workshop.atlassian.net/browse/${issue.id}</a></td><td>${summary}</td><td>${prettyAge}</td></tr>`;
         });
         output += `${rows}</tbody></table>`;
+        total += result[brand].length;
     }
 
-    output = `<h2>Outstanding counts</h2><table><tbody><tr><th>Brand</th><th># outstanding</th></tr>${overview}</tbody></table>${output}`;
+    output = `<h2>Outstanding counts</h2><p>total: ${total}</p><table><tbody><tr><th>Brand</th><th># outstanding</th></tr>${overview}</tbody></table>${output}`;
 
     return output;
 }
