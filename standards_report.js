@@ -1,7 +1,7 @@
 import * as Jira from './jira.js';
 import * as Confluence from './confluence.js';
 
-const searchJql = "status%20in%20%28%22In%20Progress%22%2C%20Open%29%20AND%20labels%20%3D%20Standards%20order%20by%20created%20DESC";
+const searchJql = "status%20in%20%28%22Design%20Review%22%2C%20%22Functional%20QA%22%2C%20%22In%20Progress%22%2C%20Open%2C%20%22Ready%20for%20QA%22%2C%20Staged%2C%20Verified%2C%20%22Verified%20on%20Multidev%22%29%20labels%20%3D%20Standards%20order%20by%20created%20DESC";
 const confluencePageUrl = "https://electro-creative-workshop.atlassian.net/wiki/spaces/TEC/pages/1152386811/Platform+Standards+report";
 const confluencePage = "1152386811";
 
